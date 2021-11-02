@@ -1,14 +1,16 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: managed-premium-retain-sc
-provisioner: kubernetes.io/azure-disk
+  name: usermgmt-webapp
+provisioner: kubernetes.io/gce-pd  #kubernetes.io/azure-disk
 reclaimPolicy: Retain  # Default is Delete, recommended is retain
 volumeBindingMode: WaitForFirstConsumer # Default is Immediate, recommended is WaitForFirstConsumer
 allowVolumeExpansion: true  
 parameters:
-  storageaccounttype: Premium_LRS # or we can use Standard_LRS
-  kind: Managed # Default is shared, recommended is Managed
+  type: pd-standard
+  fstype: ext4
+  # storageaccounttype: Premium_LRS # or we can use Standard_LRS
+  # kind: Managed # Default is shared, recommended is Managed
 
 
 #########################################################################
