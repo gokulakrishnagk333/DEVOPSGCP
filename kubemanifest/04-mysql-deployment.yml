@@ -35,7 +35,7 @@ spec:
       volumes: 
         - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: azure-managed-disk-pvc
+            claimName: usermgmt-webapp-pvc
         - name: usermanagement-dbcreation-script
           configMap:
             name: usermanagement-dbcreation-script
