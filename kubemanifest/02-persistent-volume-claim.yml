@@ -2,11 +2,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   namespace: production
-  name: azure-managed-disk-pvc
+  name: usermgmt-webapp-pvc
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: managed-premium-retain-sc 
+  storageClassName: usermgmt-webapp 
   resources:
     requests:
       storage: 5Gi         
