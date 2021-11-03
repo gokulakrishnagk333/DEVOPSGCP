@@ -55,11 +55,11 @@ Image Push to Docker Hub:
 GKE Deployment:
   stage: deployment
   script:
-    - sudo kubectl get namespace
-    - sudo kubectl apply -f kubemanifest/
-    - sudo kubectl get deployments -n production
-    - sudo kubectl get pods -n production
-    - sudo kubectl get secret -n production
+    - kubectl get namespace
+    - kubectl apply -f kubemanifest/
+    - kubectl get deployments -n production
+    - kubectl get pods -n production
+    - kubectl get secret -n production
   tags:
     - devops
   only:
