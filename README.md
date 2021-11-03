@@ -112,14 +112,55 @@ Zap Scanner:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: managed-premium-retain-sc
-provisioner: kubernetes.io/azure-disk
+  name: usermgmt-webapp
+provisioner: kubernetes.io/gce-pd  #kubernetes.io/azure-disk
 reclaimPolicy: Retain  # Default is Delete, recommended is retain
 volumeBindingMode: WaitForFirstConsumer # Default is Immediate, recommended is WaitForFirstConsumer
 allowVolumeExpansion: true  
 parameters:
-  storageaccounttype: Premium_LRS # or we can use Standard_LRS
-  kind: Managed # Default is shared, recommended is Managed
+  type: pd-standard
+  fstype: ext4
+  # storageaccounttype: Premium_LRS # or we can use Standard_LRS
+  # kind: Managed # Default is shared, recommended is Managed
+
+
+#########################################################################
+# If you want to up to date in technology follow me on www.gokulakrishna.me
+
+######################3############################################################
+# Additional Reference to remember configuration
+# https://kubernetes.io/docs/concepts/storage/storage-classes/#azure-disk
+
+##############################################################################
+# Note - 1:
+#volumeBindingMode: Immediate - This setting implies that the PersistentVolumecreation, 
+#followed with the storage medium (Azure Disk in this case) provisioning is triggered as 
+#soon as the PersistentVolumeClaim is created.
+
+# Note - 2:
+# volumeBindingMode: WaitForFirstConsumer 
+#By default, the Immediate mode indicates that volume binding and dynamic provisioning 
+#occurs once the PersistentVolumeClaim is created. For storage backends that are 
+#topology-constrained and not globally accessible from all Nodes in the cluster, 
+#PersistentVolumes will be bound or provisioned without knowledge of the Pod's scheduling 
+#requirements. This may result in unschedulable Pods.
+#A cluster administrator can address this issue by specifying the WaitForFirstConsumer 
+#mode which will delay the binding and provisioning of a PersistentVolume until a 
+#Pod using the PersistentVolumeClaim is created. PersistentVolumes will be selected or 
+#provisioned conforming to the topology that is specified by the Pod's scheduling 
+#constraints. 
+##############################################################################
+# Note - 3: 
+#reclaimPolicy: Delete - With this setting, as soon as a PersistentVolumeClaim is deleted, 
+#it also triggers the removal of the corresponding PersistentVolume along with the 
+#Azure Disk. 
+#We will be surprised provided if we intended to retain that data as backup.
+# reclaimPolicy: retain -  Disk is retained even when PVC is deleted - Recommended Option
+
+# Note - 4:
+# Both reclaimPolicy: Delete and volumeBindingMode: Immediate are default settings
+##############################################################################
+
 
 ```
 ### Persistent Volume Claim YAML
@@ -128,16 +169,18 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   namespace: production
-  name: azure-managed-disk-pvc
+  name: usermgmt-webapp-pvc
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: managed-premium-retain-sc 
+  storageClassName: usermgmt-webapp 
   resources:
     requests:
-      storage: 5Gi      
+      storage: 5Gi         
+
 # Mapped PVC with customized storage class to retain
-# AKS already provisioned Storage classes managed-premium 
+# GKE already provisioned Storage classes managed-premium 
+
 ```
 ### MySQL Deployment YAML
 ```
@@ -178,7 +221,7 @@ spec:
       volumes: 
         - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: azure-managed-disk-pvc
+            claimName: usermgmt-webapp-pvc
         - name: usermanagement-dbcreation-script
           configMap:
             name: usermanagement-dbcreation-script
@@ -347,7 +390,6 @@ Stage 5 (Deployment)
 ![Image](Demo_Images/Deployment2.png)
 ![Image](Demo_Images/Deployment1.png)
 ![Image](Demo_Images/Secret.png)
-![Image](Demo_Images/Azure_Workload.png)
 ```
 Stage 6 (Zap Scanner)
 
