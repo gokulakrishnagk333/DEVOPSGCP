@@ -6,7 +6,7 @@
 - Installed following tools in Gitlab Runner
   - Trivy
   - Kubectl
-  - Azure Cli
+  - Azure Cli / gcloud cli
   - Docker
   - Java
   - Maven
@@ -80,7 +80,7 @@ Image Push to Docker Hub:
   only:
     - main  
 
-AKS Deployment:
+AKS/GCP Deployment:
   stage: deployment
   script:
     - sudo kubectl create namespace production
