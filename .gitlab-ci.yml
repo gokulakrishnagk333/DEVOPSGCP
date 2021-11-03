@@ -52,7 +52,7 @@ Image Push to Docker Hub:
   only:
     - main  
 
-AKS Deployment:
+GKE Deployment:
   stage: deployment
   script:
     - sudo kubectl get namespace
