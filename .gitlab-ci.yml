@@ -73,7 +73,7 @@ Zap Scanner:
       ServiceIP=`sudo kubectl get svc -n production | grep usermgmt-webapp-service | awk '{print $4}'`
     - sudo docker run -v $(pwd)/report:/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -I -t http://$ServiceIP -r report.html
   artifacts:
-    when: always
+   # when: always
     paths:
       - report/report.html
   tags:
