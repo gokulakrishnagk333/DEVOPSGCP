@@ -1,17 +1,29 @@
+# Overview
 ```
+- Provided entire code in full with kubernetes manifests, pipelines, scripts
+- Created a kubernetes Java Application with Mysql DB deployment, in GKE / AKS cluster
+- Both Mysql and Usermanagement WebApp deployments need a secret with name API-KEY
+- Mounted mysql_usermgmt.sql file as Config-Map(usermanagement-dbcreation-script) in PV
+- API-KEY is refered as mysqldbpassword in Mysql environment variables within the container when container starts inside a pod
+- API_KEY env variable is not used yet in app, once the Mysql / Usermanagement WebApp pod created it container refer the mysql db password from secret
+- Created LoadBalancer Type service for application and included in Code.
+- Allocated minimum 2 pods always up and running
+- Allocated only 1 pod unavailable during Rolling Update of Deployment
 ```
+
+
 # Pre-requisites
 ```
 - Created Gitlab runner VM in GCP
 - Installed following tools in Gitlab Runner
   - Trivy
   - Kubectl
-  - Azure Cli / gcloud cli
+  - Azure Cli / gcloud sdk cli
   - Docker
   - Java
   - Maven
   - Terraform
-- Created AKS cluster using terraform script from gitlab runner VM add in same repo (check it from following url https://gitlab.com/gokulakrishnag/gokul/-/tree/terraform )
+- Created GKE/AKS cluster using terraform script from gitlab runner VM add in same repo (check it from following url https://gitlab.com/gokulakrishnag/gokul/-/tree/terraform for GCP https://gitlab.com/gokulakrishnag/gokul/-/tree/main/GCP)
 - Created service account gitlab-runner to login to cluster with its config file which consist of secret and token  (to check gitlabrunner service account YAML from following url https://gitlab.com/gokulakrishnag/gokul/-/blob/main/pre-requisites-serviceaccount-role-rolebinding.yml)
 - GitLab Account
 - Created Required Kubemanifest files and add in repo
@@ -52,8 +64,8 @@ Dependencies: # to cross check added same before script in this stage
 
 Maven Build:
   stage: build
-  script:
-    - sudo mvn clean install
+  script: # 1. In this step: It will Build the app and copy the code apache tomcat container and build the image.
+    - sudo mvn clean install 
     - sudo chmod -R 777 target
   tags:
     - devops
@@ -84,6 +96,7 @@ AKS/GCP Deployment:
   stage: deployment
   script:
     - sudo kubectl create namespace production
+    - sudo kubectl get namespace
     - sudo kubectl apply -f kubemanifest/
     - sudo kubectl get deployments -n production
     - sudo kubectl get pods -n production
@@ -399,7 +412,7 @@ Stage 6 (Zap Scanner)
 ## Pipeline Success
 ![Image](Demo_Images/Pipeline_success.png)
 ![Image](Demo_Images/pipeline2.png)
-
+![Image](Demo_Images/gke.png)
 # Access Application
 
 ```
