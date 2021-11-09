@@ -36,89 +36,6 @@
     - deployment
     - zapscanner
 ```
-## GitLab Pipeline Code '.gitlab-ci.yml'
-```
-stages:
-  - dependency
-  - build
-  - trivyscanner
-  - pushtocr
-  - deployment
-  - zapscanner
-variables:
-  GIT_STRATEGY: clone
-
-before_script: # to cross check the permission applied, so added same script (before script) in this stage
-  - sudo chmod -R 777 /home/gitlab-runner/builds
-  - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/builds
-
-Dependencies: # to cross check added same before script in this stage
-  stage: dependency
-  script:
-    - sudo chmod -R 777 /home/gitlab-runner/builds
-    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/builds
-  tags:
-    - devops
-  only:
-    - main
-
-Maven Build:
-  stage: build
-  script: # 1. In this step: It will Build the app and copy the code apache tomcat container and build the image.
-    - sudo mvn clean install 
-    - sudo chmod -R 777 target
-  tags:
-    - devops
-  only:
-    - main
-
-Trivy Scanner:
-  stage: trivyscanner
-  script:
-    - sudo docker images
-    - sudo trivy --exit-code 1 --no-progress --ignore-unfixed --severity HIGH,CRITICAL flyahead/gokul-usermgmt-webapp:1.2.0 # if the image has high or critical vulnerability pipeline will be exited.
-   # - sudo trivy --no-progress --ignore-unfixed --severity HIGH,CRITICAL flyahead/gokul-usermgmt-webapp:1.2.0 # if you removed the --exit-code it go to next stage.
-  tags:
-    - devops
-  only:
-    - main
-
-Image Push to Docker Hub:
-  stage: pushtocr
-  script:
-    - sudo docker push flyahead/gokul-usermgmt-webapp:1.2.0
-  tags:
-    - devops
-  only:
-    - main  
-
-AKS/GCP Deployment:
-  stage: deployment
-  script:
-    - sudo kubectl create namespace production
-    - sudo kubectl get namespace
-    - sudo kubectl apply -f kubemanifest/
-    - sudo kubectl get deployments -n production
-    - sudo kubectl get pods -n production
-    - sudo kubectl get secret -n production
-  tags:
-    - devops
-  only:
-    - main
-
-Zap Scanner:
-  stage: zapscanner
-  script:
-    - sudo kubectl get service -n production
-    - |
-      ServiceIP=`sudo kubectl get svc -n production | grep usermgmt-webapp-service | awk '{print $4}'`
-    - sudo docker run -v $(pwd)/report:/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -I -t http://$ServiceIP -r testreport.html
-  tags:
-    - devops
-  only:
-    - main
-
-```
 ## Kubemanifest Detail
 ### Storage Class YAML
 ```
@@ -266,8 +183,9 @@ metadata:
 type: Opaque # password format changed base64 that's why here we used opaque
 data:
   db-password: ZGJwYXNzd29yZDEx
----
+
 ```
+![Image](Demo_Images/gkesecret.png)
 ## MySQL usermgmnt-dbcreation-script
 ```
 apiVersion: v1
@@ -280,6 +198,7 @@ data:
     DROP DATABASE IF EXISTS webappdb;
     CREATE DATABASE webappdb; 
 ```
+![Image](Demo_Images/gkedbconfig.png)
 ## User Management WebApp Deployment YAML
 ```
 apiVersion: apps/v1
@@ -364,6 +283,89 @@ spec:
   targetCPUUtilizationPercentage: 50
 # HPA Imperative - Replace
 # kubectl autoscale deployment hpa-demo-deployment --cpu-percent=50 --min=1 --max=10
+```
+## GitLab Pipeline Code '.gitlab-ci.yml'
+```
+stages:
+  - dependency
+  - build
+  - trivyscanner
+  - pushtocr
+  - deployment
+  - zapscanner
+variables:
+  GIT_STRATEGY: clone
+
+before_script: # to cross check the permission applied, so added same script (before script) in this stage
+  - sudo chmod -R 777 /home/gitlab-runner/builds
+  - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/builds
+
+Dependencies: # to cross check added same before script in this stage
+  stage: dependency
+  script:
+    - sudo chmod -R 777 /home/gitlab-runner/builds
+    - sudo chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/builds
+  tags:
+    - devops
+  only:
+    - main
+
+Maven Build:
+  stage: build
+  script: # 1. In this step: It will Build the app and copy the code apache tomcat container and build the image.
+    - sudo mvn clean install 
+    - sudo chmod -R 777 target
+  tags:
+    - devops
+  only:
+    - main
+
+Trivy Scanner:
+  stage: trivyscanner
+  script:
+    - sudo docker images
+    - sudo trivy --exit-code 1 --no-progress --ignore-unfixed --severity HIGH,CRITICAL flyahead/gokul-usermgmt-webapp:1.2.0 # if the image has high or critical vulnerability pipeline will be exited.
+   # - sudo trivy --no-progress --ignore-unfixed --severity HIGH,CRITICAL flyahead/gokul-usermgmt-webapp:1.2.0 # if you removed the --exit-code it go to next stage.
+  tags:
+    - devops
+  only:
+    - main
+
+Image Push to Docker Hub:
+  stage: pushtocr
+  script:
+    - sudo docker push flyahead/gokul-usermgmt-webapp:1.2.0
+  tags:
+    - devops
+  only:
+    - main  
+
+AKS/GCP Deployment:
+  stage: deployment
+  script:
+    - sudo kubectl create namespace production
+    - sudo kubectl get namespace
+    - sudo kubectl apply -f kubemanifest/
+    - sudo kubectl get deployments -n production
+    - sudo kubectl get pods -n production
+    - sudo kubectl get secret -n production
+  tags:
+    - devops
+  only:
+    - main
+
+Zap Scanner:
+  stage: zapscanner
+  script:
+    - sudo kubectl get service -n production
+    - |
+      ServiceIP=`sudo kubectl get svc -n production | grep usermgmt-webapp-service | awk '{print $4}'`
+    - sudo docker run -v $(pwd)/report:/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -I -t http://$ServiceIP -r testreport.html
+  tags:
+    - devops
+  only:
+    - main
+
 ```
 # Implementation Part
 
