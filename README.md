@@ -22,7 +22,7 @@
   - Java
   - Maven
   - Terraform
-- Created GKE/AKS cluster using terraform script from gitlab runner VM add in same repo (check it from following url https://gitlab.com/gokulakrishnag/gokul/-/tree/terraform for GCP https://gitlab.com/gokulakrishnag/gokul/-/tree/main/GCP)
+- Created GKE/AKS cluster using terraform script from gitlab runner VM add in same repo (check it from following url for Azure https://gitlab.com/gokulakrishnag/gokul/-/tree/terraform for GCP https://gitlab.com/gokulakrishnag/gokul/-/tree/main/GCP)
 - Created service account gitlab-runner to login to cluster with its config file which consist of secret and token  (to check gitlabrunner service account YAML from following url https://gitlab.com/gokulakrishnag/gokul/-/blob/main/pre-requisites-serviceaccount-role-rolebinding.yml)
 - GitLab Account
 - Created Required Kubemanifest files and add in repo
