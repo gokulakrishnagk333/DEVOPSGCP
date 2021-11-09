@@ -8,7 +8,6 @@
 - Create AKS Cluster with default nodepool
 - Create AKS Cluster Output Values
 - Provision Azure AKS Cluster using Terraform
-- 
 
 ## Create SSH Public Key for Linux VMs
 ```
