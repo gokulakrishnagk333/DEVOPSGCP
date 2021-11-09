@@ -1,7 +1,9 @@
 # Overview
 ```
 - Provided entire code in full with kubernetes manifests, pipelines, scripts
-- Created a kubernetes Java Application with Mysql DB deployment, in GKE / AKS cluster
+
+- Created a kubernetes Java Application with Mysql DB deployment Manifests to deploy in GKE / AKS cluster using fullyautomated Gitlab DEVSECOPS Pipeline
+- Created Storage Class and PVC
 - Both Mysql and Usermanagement WebApp deployments need a secret with name API-KEY
 - Mounted mysql_usermgmt.sql file as Config-Map(usermanagement-dbcreation-script) in PV
 - API-KEY is refered as mysqldbpassword in Mysql environment variables within the container when container starts inside a pod
@@ -10,8 +12,6 @@
 - Allocated minimum 2 pods always up and running
 - Allocated only 1 pod unavailable during Rolling Update of Deployment
 ```
-
-
 # Pre-requisites
 ```
 - Created Gitlab runner VM in GCP
@@ -173,8 +173,6 @@ parameters:
 # Note - 4:
 # Both reclaimPolicy: Delete and volumeBindingMode: Immediate are default settings
 ##############################################################################
-
-
 ```
 ### Persistent Volume Claim YAML
 ```
@@ -193,8 +191,8 @@ spec:
 
 # Mapped PVC with customized storage class to retain
 # GKE already provisioned Storage classes managed-premium 
-
 ```
+![Image](Demo_Images/gkestorageclass.png)
 ### MySQL Deployment YAML
 ```
 apiVersion: apps/v1
@@ -239,6 +237,22 @@ spec:
           configMap:
             name: usermanagement-dbcreation-script
 ``` 
+## Mysql Service YAML
+```
+apiVersion: v1
+kind: Service
+metadata: 
+  namespace: production
+  name: mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql 
+  ports: 
+    - port: 3306  
+# Mysql service mapped with clusterIP    
+```
+ ![Image](Demo_Images/gkemysqlsvc.png)
 ### Created Secret for MySQL environment DB Password  YAML (kubernetes Secrets YAML)
 ```
 'dbpassword11' changed to base64 format
@@ -325,13 +339,15 @@ metadata:
   labels: 
     app: usermgmt-webapp
 spec: 
-  type: NodePort #can use NodePort / LoadBalancer / Ingress for external access, here i used LoadBalancer because it recommended method.
+  type: LoadBalancer #can use NodePort / LoadBalancer / Ingress for external access, here i used LoadBalancer because it recommended method.
   selector: 
     app: usermgmt-webapp
   ports: 
     - port: 80
       targetPort: 8080
 ```
+ ![Image](Demo_Images/gkelbsvc.png)
+
 ## HPA User Management WebApp YAML
 ```
 apiVersion: autoscaling/v1
