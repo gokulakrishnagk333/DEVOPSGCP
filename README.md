@@ -1,8 +1,7 @@
 # Overview
 ```
 - Provided entire code in full with kubernetes manifests, pipelines, scripts
-
-- Created a kubernetes Java Application with Mysql DB deployment Manifests to deploy in GKE / AKS cluster using fullyautomated Gitlab DEVSECOPS Pipeline
+- Created a kubernetes Java Application with Mysql DB deployment Manifests to deploy in GKE / AKS cluster using fully automated Gitlab DEVSECOPS Pipeline (included trivy, OWASP ZAP)
 - Created Storage Class and PVC
 - Both Mysql and Usermanagement WebApp deployments need a secret with name API-KEY
 - Mounted mysql_usermgmt.sql file as Config-Map(usermanagement-dbcreation-script) in PV
