@@ -2,8 +2,8 @@
 ```
 - Provided entire code in full with kubernetes manifests, pipelines, scripts
 - Created a kubernetes Java Application with Mysql DB deployment Manifests to deploy in GKE / AKS cluster using fully automated Gitlab DEVSECOPS Pipeline (included trivy, OWASP ZAP)
+- Both Mysql and Usermanagement Java WebApp deployments need a secret with name API-KEY
 - Created Storage Class and PVC
-- Both Mysql and Usermanagement WebApp deployments need a secret with name API-KEY
 - Mounted mysql_usermgmt.sql file as Config-Map(usermanagement-dbcreation-script) in PV
 - API-KEY is refered as mysqldbpassword in Mysql environment variables within the container when container starts inside a pod
 - API_KEY env variable is not used yet in app, once the Mysql / Usermanagement WebApp pod created it container refer the mysql db password from secret
