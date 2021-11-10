@@ -427,7 +427,7 @@ Stage 6 (Zap Scanner)
 ```
 ![Image](Demo_Images/Zap.png)
 ## Pipeline Success
-![Image](Demo_Images/Pipeline_success.png)
+![Image](Demo_Images/gkejobs.png)
 ![Image](Demo_Images/gkepipeline.png)
 ![Image](Demo_Images/gke.png)
 # Access Application
