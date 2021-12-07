@@ -1,0 +1,31 @@
+---
+ - hosts: windows
+   remote_user: root
+   roles:
+    - copy
+    
+    - 7zip
+
+    - Canon
+
+    - MS_Office
+
+#    - Java
+
+#    - Putty
+
+    - Notepadplus
+
+    - Adobe_Reader
+
+#    - Zimbra
+
+    - King_Soft
+
+    - Watchguard
+
+    - Mattermost
+
+    - registry
+
+    - Script
