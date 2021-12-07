@@ -1,0 +1,6 @@
+ansible_user: admin
+ansible_password: "P@ssw0rd@123"
+ansible_port: 5986
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+ansible_winrm_scheme: https
