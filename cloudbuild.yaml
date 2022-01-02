@@ -1,4 +1,5 @@
 steps:
+# 1. MVN Build & Docker Image Build
 - name: maven:3-jdk-8
   entrypoint: 'mvn'
   args: ['clean','install','-DskipTests']
@@ -6,10 +7,11 @@ logsBucket: 'gs://gokul1234'
 serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 options:
   logging: GCS_ONLY
+# 2. Docker Image Push
 - name: "gcr.io/cloud-builders/docker"
   args: ["push", "gcr.io/gokul-330305/gokul-usermgmt-webapp:1.2.0"]
-logsBucket: 'gs://gokul1234'
-serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
-options:
-  logging: GCS_ONLY
+# logsBucket: 'gs://gokul1234'
+# serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
+# options:
+#   logging: GCS_ONLY
 #   args: ['clean','install','-DskipTests']
