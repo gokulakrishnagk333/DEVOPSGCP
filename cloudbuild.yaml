@@ -9,7 +9,7 @@ options:
   logging: GCS_ONLY
 # 2. Docker Image Push
 - name: "gcr.io/cloud-builders/docker"
-  args: ["push", "gcr.io/gokul-330305/gokul-usermgmt-webapp:1.2.0"]
+  args: ["push", "gcr.io/$PROJECT_ID/gokul-usermgmt-webapp:1.2.0"]
 # logsBucket: 'gs://gokul1234'
 # serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 # options:
