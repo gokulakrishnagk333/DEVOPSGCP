@@ -3,7 +3,7 @@ steps:
   entrypoint: mvn
   args: ['clean']
 #logsBucket: 'gs://build'
-#serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
+serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 # options:
 #   logging: CLOUD_LOGGING_ONLY
 - name: "gcr.io/cloud-builders/docker"
