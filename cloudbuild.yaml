@@ -7,7 +7,7 @@ serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 options:
   logging: GCS_ONLY
 # - name: "gcr.io/cloud-builders/docker"
-#   args: ["push", "gcr.io/$PROJECT_ID/gokul-usermgmt-webapp:1.2.0"]
+#   args: ["push", "gcr.io/$project_id/gokul-usermgmt-webapp:1.2.0"]
 #logsBucket: 'gs://build'
 #serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 # options:
