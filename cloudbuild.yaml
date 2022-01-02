@@ -5,7 +5,7 @@ steps:
 logsBucket: 'gs://gokul1234'
 serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: GCS_ONLY
 # - name: "gcr.io/cloud-builders/docker"
 #   args: ["push", "gcr.io/$PROJECT_ID/gokul-usermgmt-webapp:1.2.0"]
 #logsBucket: 'gs://build'
