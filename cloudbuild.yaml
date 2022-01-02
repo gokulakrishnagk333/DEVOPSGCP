@@ -10,6 +10,6 @@ serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
   args: ["push", "gcr.io/$PROJECT_ID/gokul-usermgmt-webapp:1.2.0"]
 #logsBucket: 'gs://build'
 #serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
-options:
-  logging: CLOUD_LOGGING_ONLY
+# options:
+#   logging: CLOUD_LOGGING_ONLY
 #   args: ['clean','install','-DskipTests']
