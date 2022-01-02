@@ -4,7 +4,7 @@ steps:
 logsBucket: 'gs://build'
 serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: GCS_ONLY
 - name: maven:3-jdk-8
   entrypoint: mvn
   args: ['clean','install','-DskipTests']
