@@ -124,7 +124,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<repository>gcr.io/$project_id/${project.name}</repository>
+							<repository>gcr.io/gokul-330305/${project.name}</repository>
 							<tag>${project.version}</tag>
 							<skipDockerInfo>true</skipDockerInfo>
 						</configuration>
