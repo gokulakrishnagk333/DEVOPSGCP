@@ -1,13 +1,12 @@
 steps:
+- name: 'bash'
+  args: ['echo', 'Hello world!']
+logsBucket: 'gs://build'
+serviceAccount: '200307957970@cloudbuild.gserviceaccount.com'
+options:
+  logging: CLOUD_LOGGING_ONLY
 - name: maven:3-jdk-8
   entrypoint: mvn
   args: ['clean','install','-DskipTests']
-# options:
-#    logging: NONE
 - name: "gcr.io/cloud-builders/docker"
   args: ["push", "gcr.io/$PROJECT_ID/gokul-usermgmt-webapp:1.2.0"]
-# - name: 'bash'
-#   args: ['echo', 'Hello world!']
-# logsBucket: 'gs://build'
-# options:
-#   logging: GCS_ONLY
